@@ -1,51 +1,31 @@
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { createRoot } from "react-dom/client";
+import "./index.css";
 
 import Root from "./pages/Root";
 // import Planned from "./pages/Planned";
 // import Favorite from "./pages/Favorite";
 // import Watched from "./pages/Watched";
 import ErrorPage from "./pages/ErrorPage";
-import Navigation from "./components/Navigation";
-import React from "react";
-import ReactDOM from "react-dom";
 
 const queryClient = new QueryClient();
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-  },
-  // {
-  //   path: "/planned",
-  //   element: <Planned />,
-  //   errorElement: <ErrorPage />,
-  // },
-  // {
-  //   path: "/favorite",
-  //   element: <Favorite />,
-  //   errorElement: <ErrorPage />,
-  // },
-  // {
-  //   path: "/watched",
-  //   element: <Watched />,
-  //   errorElement: <ErrorPage />,
-  // },
-]);
+const router = (
+  <Routes>
+    <Route path="/" element={<Root />} />
+    {/* <Route path="/planned" element={<Planned />} />
+    <Route path="/favorite" element={<Favorite />} />
+    <Route path="/watched" element={<Watched />} /> */}
+    <Route path="*" element={<ErrorPage />} />
+  </Routes>
+);
 
-ReactDOM.render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Navigation />
-      <RouterProvider router={router} />
-      <Outlet />
+      <Router>{router}</Router>
     </QueryClientProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
