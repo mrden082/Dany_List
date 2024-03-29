@@ -22,7 +22,7 @@ const AnimeInfo = ({ animeId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchAnimeList(animeId); // Используем функцию fetchAnimeList для получения данных об аниме
+        const response = await fetchAnimeList(animeId);
         setMedia(response.data.Media);
       } catch (error) {
         console.error(error);

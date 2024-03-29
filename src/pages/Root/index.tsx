@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import AnimeList from "../../components/AnimeList";
 import SearchAnime from "../../components/SearchAnime";
 import fetchAnimeList from "../../utils/api";
 
@@ -51,7 +50,11 @@ const Root: React.FC = () => {
     <>
       <Navigation />
       <SearchAnime onSearch={handleSearch} />
-      <AnimeList animeList={animeList} />
+      <div>
+        {animeList.map((anime: Anime) => (
+          <div key={anime.id}>{anime.title}</div>
+        ))}
+      </div>
       <Outlet />
     </>
   );
