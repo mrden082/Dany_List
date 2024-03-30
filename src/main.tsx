@@ -1,31 +1,52 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
-import Root from "./pages/Root";
+import Root, { loader as rootLoader } from "./pages/Root";
 import Planned from "./pages/Planned";
 import Favorite from "./pages/Favorite";
 import Watched from "./pages/Watched";
 import ErrorPage from "./pages/ErrorPage";
+import AnimeInfoPage from "./pages/AnimeIfoPage";
 
 const queryClient = new QueryClient();
 
-const router = (
-  <Routes>
-    <Route path="/" element={<Root />} />
-    <Route path="/planned" element={<Planned />} />
-    <Route path="/favorite" element={<Favorite />} />
-    <Route path="/watched" element={<Watched />} />
-    <Route path="*" element={<ErrorPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    loader: rootLoader,
+    children: [
+      {
+        path: "/animeInfoPage",
+        element: <AnimeInfoPage />,
+      },
+    ],
+  },
+  {
+    path: "/planned",
+    element: <Planned />,
+    loader: rootLoader,
+  },
+  {
+    path: "/favorite",
+    element: <Favorite />,
+    loader: rootLoader,
+  },
+  {
+    path: "/watched",
+    element: <Watched />,
+    loader: rootLoader,
+  },
+]);
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Router>{router}</Router>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   </React.StrictMode>
 );

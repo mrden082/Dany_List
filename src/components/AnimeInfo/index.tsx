@@ -1,29 +1,21 @@
 import { useState, useEffect } from "react";
 import fetchAnimeList from "../../utils/api";
+import Media from "../../utils/types";
 
-const AnimeInfo = ({ animeId }) => {
-  const [media, setMedia] = useState(null);
-  const [favorite, setFavorite] = useState(false);
-  const [planned, setPlanned] = useState(false);
-  const [watched, setWatched] = useState(false);
+interface Props {
+  animeId: number;
+}
 
-  const handleFavoriteChange = () => {
-    setFavorite((prevValue) => !prevValue);
-  };
-
-  const handlePlannedChange = () => {
-    setPlanned((prevValue) => !prevValue);
-  };
-
-  const handleWatchedChange = () => {
-    setWatched((prevValue) => !prevValue);
-  };
+const AnimeInfo = ({
+  animeId,
+}: Props) => {
+  const [media, setMedia] = useState<Media | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchAnimeList(animeId);
-        setMedia(response.data.Media);
+        setMedia(response);
       } catch (error) {
         console.error(error);
       }
@@ -48,14 +40,16 @@ const AnimeInfo = ({ animeId }) => {
 
   return (
     <div>
-      <h2>{title.romaji}</h2>
+      <h2>{title?.romaji}</h2>
       <div>
         <h3>Characters:</h3>
-        <ul>
-          {characters.nodes.map((character) => (
-            <li key={character.name.full}>{character.name.full}</li>
-          ))}
-        </ul>
+        {characters && (
+          <ul>
+            {characters.nodes.map((character) => (
+              <li key={character.name.full}>{character.name.full}</li>
+            ))}
+          </ul>
+        )}
       </div>
       <div>
         <strong>Start Date:</strong> {startDate.year}-{startDate.month}-
@@ -104,4 +98,4 @@ const AnimeInfo = ({ animeId }) => {
   );
 };
 
-export default AnimeInfo;
+  export default AnimeInfo;

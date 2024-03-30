@@ -3,7 +3,11 @@ import { useStore } from "../../utils/store";
 
 type Anime = {
   id: number;
-  title: string;
+  title: {
+    romaji: string;
+    english: string;
+    native: string;
+  };
 };
 
 type NewAnimeListProps = {

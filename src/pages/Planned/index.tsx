@@ -30,7 +30,7 @@ const Navigation: React.FC = () => {
   );
 };
 
-const Root: React.FC = () => {
+const Planned: React.FC = () => {
   const [animeList, setAnimeList] = useState<Anime[]>([]);
 
   const handleSearch = async (query: string) => {
@@ -54,4 +54,5 @@ const Root: React.FC = () => {
   );
 };
 
-export default Root;
+export default Planned;
+

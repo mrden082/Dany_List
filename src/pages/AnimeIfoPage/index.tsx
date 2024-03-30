@@ -1,13 +1,15 @@
-import React from "react";
+import { useParams } from "react-router-dom";
 import AnimeInfo from "../../components/AnimeInfo";
 
 const AnimeInfoPage = () => {
-  const animeId = id;
+  const { animeId } = useParams<{ animeId: string }>();
 
   return (
     <div>
       <h1>Anime Info</h1>
-      <AnimeInfo animeId={animeId} />
+      <AnimeInfo
+        animeId={Number(animeId)}
+      />
     </div>
   );
 };

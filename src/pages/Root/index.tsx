@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
-import SearchAnime from "../../components/SearchAnime";
 import fetchAnimeList from "../../utils/api";
+import "./root.css";
+
+export const loader = async (id: number) => {
+  const animeList = await fetchAnimeList(id);
+  return animeList;
+};
 
 type Anime = {
   id: number;
-  title: string;
+  title: {
+    romaji: string;
+    english: string;
+    native: string;
+  };
 };
 
 const Navigation: React.FC = () => {
@@ -14,16 +23,24 @@ const Navigation: React.FC = () => {
       <nav>
         <ul>
           <li>
-            <Link to="/">Главная</Link>
+            <Link to="/" className="home">
+              <img src="../../assets/home.png" alt="home" />
+            </Link>
           </li>
           <li>
-            <Link to="/favorite">Избранное</Link>
+            <Link to="/favorite" className="favorite">
+              <img src="../../assets/favorite.png" alt="favorite" />
+            </Link>
           </li>
           <li>
-            <Link to="/planned">Запланированное</Link>
+            <Link to="/planned" className="planned">
+              <img src="../../assets/planned.png" alt="planned" />
+            </Link>
           </li>
           <li>
-            <Link to="/watched">Просмотренное</Link>
+            <Link to="/watched" className="watched">
+              <img src="../../assets/watched.png" alt="watched" />
+            </Link>
           </li>
         </ul>
       </nav>
@@ -33,27 +50,47 @@ const Navigation: React.FC = () => {
 
 const Root: React.FC = () => {
   const [animeList, setAnimeList] = useState<Anime[]>([]);
+  const [filterTitles, setFilterTitles] = useState<string>("");
 
-  const handleSearch = async (query: string) => {
-    try {
-      const response: Anime[] = await fetchAnimeList();
-      const filteredAnimeList = response.filter((anime) =>
-        anime.title.toLowerCase().includes(query.toLowerCase())
-      );
-      setAnimeList(filteredAnimeList);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async (id: number) => {
+      try {
+        const response = await fetchAnimeList(id);
+        setAnimeList(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
       <Navigation />
-      <SearchAnime onSearch={handleSearch} />
+      <input
+        className="search-input"
+        placeholder="Filter"
+        value={filterTitles}
+        onChange={(e) => setFilterTitles(e.target.value)}
+      />
       <div>
-        {animeList.map((anime: Anime) => (
-          <div key={anime.id}>{anime.title}</div>
-        ))}
+        {animeList
+          .filter((anime) =>
+            filterTitles === ""
+              ? anime
+              : anime.title.romaji
+                  .toLowerCase()
+                  .includes(filterTitles.toLowerCase())
+          )
+          .map((anime: Anime) => (
+            <Link
+              to={`/animeInfoPage/${anime.id}`}
+              key={anime.id}
+            >
+              {anime.title.romaji}
+            </Link>
+          ))}
       </div>
       <Outlet />
     </>
