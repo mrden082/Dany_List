@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetchAnimeList = async (id: number) => {
+const fetchAnimeList = async () => {
   const url = "https://graphql.anilist.co";
 
   const query = `
@@ -16,14 +16,9 @@ const fetchAnimeList = async (id: number) => {
     }
   `;
 
-  const variables = {
-    id: id,
-  };
-
   try {
     const response = await axios.post(url, {
       query: query,
-      variables: variables,
     });
     const { media } = response.data.data.Page;
     return media;

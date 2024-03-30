@@ -7,9 +7,7 @@ const AnimeInfoPage = () => {
   return (
     <div>
       <h1>Anime Info</h1>
-      <AnimeInfo
-        animeId={Number(animeId)}
-      />
+      <AnimeInfo animeId={Number(animeId)} />
     </div>
   );
 };

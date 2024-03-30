@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import SearchAnime from "../../components/SearchAnime";
-import fetchAnimeList from "../../utils/api";
+import fetchAnimeList from "../../utils/Api/AnimeList";
 
 type Anime = {
   id: number;

@@ -1,27 +1,37 @@
 import { useState, useEffect } from "react";
-import fetchAnimeList from "../../utils/api";
+import { useParams } from "react-router-dom";
+import fetchAnimeDetails from "../../utils/Api/AnimeDetails";
 import Media from "../../utils/types";
 
-interface Props {
-  animeId: number;
-}
-
-const AnimeInfo = ({
-  animeId,
-}: Props) => {
+const AnimeInfo = () => {
+  const { animeId } = useParams<{ animeId: string }>();
   const [media, setMedia] = useState<Media | null>(null);
+  const [favorite, setFavorite] = useState(false);
+  const [planned, setPlanned] = useState(false);
+  const [watched, setWatched] = useState(false);
+
+  const handleFavoriteChange = () => {
+    setFavorite((prevValue) => !prevValue);
+  };
+  const handlePlannedChange = () => {
+    setPlanned((prevValue) => !prevValue);
+  };
+  const handleWatchedChange = () => {
+    setWatched((prevValue) => !prevValue);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchAnimeList(animeId);
+        const response = await fetchAnimeDetails(Number(animeId));
         setMedia(response);
       } catch (error) {
         console.error(error);
       }
     };
-
-    fetchData();
+    if (animeId) {
+      fetchData();
+    }
   }, [animeId]);
 
   if (!media) {
@@ -98,4 +108,4 @@ const AnimeInfo = ({
   );
 };
 
-  export default AnimeInfo;
+export default AnimeInfo;

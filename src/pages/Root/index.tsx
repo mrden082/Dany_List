@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
-import fetchAnimeList from "../../utils/api";
+import fetchAnimeList from "../../utils/Api/AnimeList";
+import home from "../../assets/home.png";
+import favorite from "../../assets/favorite.png";
+import planned from "../../assets/planned.png";
+import watched from "../../assets/watched.png";
 import "./root.css";
 
-export const loader = async (id: number) => {
-  const animeList = await fetchAnimeList(id);
+export const loader = async () => {
+  const animeList = await fetchAnimeList();
   return animeList;
 };
 
@@ -24,22 +28,22 @@ const Navigation: React.FC = () => {
         <ul>
           <li>
             <Link to="/" className="home">
-              <img src="../../assets/home.png" alt="home" />
+              <img src={home} alt="home" />
             </Link>
           </li>
           <li>
             <Link to="/favorite" className="favorite">
-              <img src="../../assets/favorite.png" alt="favorite" />
+              <img src={favorite} alt="favorite" />
             </Link>
           </li>
           <li>
             <Link to="/planned" className="planned">
-              <img src="../../assets/planned.png" alt="planned" />
+              <img src={planned} alt="planned" />
             </Link>
           </li>
           <li>
             <Link to="/watched" className="watched">
-              <img src="../../assets/watched.png" alt="watched" />
+              <img src={watched} alt="watched" />
             </Link>
           </li>
         </ul>
@@ -53,9 +57,9 @@ const Root: React.FC = () => {
   const [filterTitles, setFilterTitles] = useState<string>("");
 
   useEffect(() => {
-    const fetchData = async (id: number) => {
+    const fetchData = async () => {
       try {
-        const response = await fetchAnimeList(id);
+        const response = await fetchAnimeList();
         setAnimeList(response);
       } catch (error) {
         console.error(error);
@@ -84,10 +88,7 @@ const Root: React.FC = () => {
                   .includes(filterTitles.toLowerCase())
           )
           .map((anime: Anime) => (
-            <Link
-              to={`/animeInfoPage/${anime.id}`}
-              key={anime.id}
-            >
+            <Link to={`/animeInfoPage/${anime.id}`} key={anime.id}>
               {anime.title.romaji}
             </Link>
           ))}
